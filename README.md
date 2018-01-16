@@ -7,6 +7,6 @@ CC-BY-NC|在標明出處且不營利的前提下，任何使用均不受限。
 
 **越高自由度的授權，也能讓資料有越高的可能性**
 
-[CC授權資料][cc來源]
+[CC授權資料來源][cc來源]
 
 [cc來源]:https://creativecommons.org/licenses/?lang=zh_TW
