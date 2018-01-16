@@ -1,4 +1,4 @@
-# most-opendata
+# MOST opendata
 授權類型 | 授權內容
 -|-
 CC-0|任何使用均不受限
