@@ -1,0 +1,617 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "TaiBIF Data API",
+    "url" : "http://taibif.tw"
+  } ],
+  "info" : {
+    "description" : "TaiBIF Data API",
+    "version" : "1.0.0",
+    "title" : "TaiBIF Data API",
+    "contact" : {
+      "name" : "API support",
+      "email" : "gsmai.taibif@gmail.com"
+    },
+    "license" : {
+      "name" : "CC BY 4.0",
+      "url" : "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "tags" : [ {
+    "name" : "學名檢核",
+    "description" : ""
+  }, {
+    "name" : "座標檢核",
+    "description" : ""
+  }, {
+    "name" : "生物出現點位資料"
+  } ],
+  "paths" : {
+    "/taibif_search/data_service.php" : {
+      "get" : {
+        "tags" : [ "生物出現點位資料" ],
+        "summary" : "臺灣物種出現紀錄資料 API",
+        "operationId" : "getOccJson",
+        "responses" : {
+          "200" : {
+            "description" : "查詢物種出現紀錄",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "records" : {
+                      "type" : "integer",
+                      "description" : "資料筆數"
+                    },
+                    "rows" : {
+                      "type" : "array",
+                      "description" : "資料列",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "CollectionCode" : {
+                            "type" : "string",
+                            "description" : ""
+                          },
+                          "Hyperlink" : {
+                            "type" : "string",
+                            "format" : "url",
+                            "description" : "數位資料連結"
+                          },
+                          "InstitutionCode" : {
+                            "type" : "string",
+                            "description" : "資料提供者代碼"
+                          },
+                          "ScientificName" : {
+                            "type" : "string",
+                            "description" : "物種學名"
+                          },
+                          "ScientificNameInChinese" : {
+                            "type" : "string",
+                            "description" : "物種中文名"
+                          },
+                          "Collector" : {
+                            "type" : "string",
+                            "description" : "採集者"
+                          },
+                          "Locality" : {
+                            "type" : "string",
+                            "description" : "採集地"
+                          },
+                          "CollectorInChinese" : {
+                            "type" : "string",
+                            "description" : "採集者中文"
+                          },
+                          "LocalityInChinese" : {
+                            "type" : "string",
+                            "description" : "採集地中文"
+                          },
+                          "Date" : {
+                            "type" : "string",
+                            "format" : "date",
+                            "description" : "採集日期"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "institution",
+          "description" : "資料來源機構",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/Institution"
+          }
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "回傳資料偏移值。略過符合條件的資料 offset 筆後開始回傳。",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "default" : 0
+          }
+        }, {
+          "in" : "query",
+          "name" : "count",
+          "description" : "資料回傳筆數",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "default" : 10
+          }
+        } ]
+      }
+    },
+    "/taibif_search/table_service.php" : {
+      "get" : {
+        "tags" : [ "生物出現點位資料" ],
+        "summary" : "(7561) 臺灣物種出現紀錄資料表格API",
+        "operationId" : "occTable",
+        "responses" : {
+          "200" : {
+            "description" : "可內嵌於網頁的 html 資料表格",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "institution",
+          "description" : "資料來源機構",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/Institution"
+          }
+        }, {
+          "in" : "query",
+          "name" : "asc",
+          "description" : "物種學名（拉丁名部分，不含作者年代）",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "caption",
+          "description" : "資料表上顯示的標題",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "My Data"
+        }, {
+          "in" : "query",
+          "name" : "Kingdom",
+          "description" : "以界篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Phylum",
+          "description" : "以門篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Class",
+          "description" : "以綱篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Order",
+          "description" : "以目篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Family",
+          "description" : "以科篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      }
+    },
+    "/taibif_search/map_service.php" : {
+      "get" : {
+        "tags" : [ "生物出現點位資料" ],
+        "summary" : "(7573) 臺灣物種出現紀錄資料地圖API",
+        "operationId" : "occMap",
+        "responses" : {
+          "200" : {
+            "description" : "可內嵌於網頁的 html 資料地圖",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "institution",
+          "description" : "資料來源機構",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/components/schemas/Institution"
+          }
+        }, {
+          "in" : "query",
+          "name" : "asc",
+          "description" : "物種學名（拉丁名部分，不含作者年代）",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Kingdom",
+          "description" : "以界篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Phylum",
+          "description" : "以門篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Class",
+          "description" : "以綱篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Order",
+          "description" : "以目篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "Family",
+          "description" : "以科篩選資料",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "SWlat",
+          "description" : "緯度南界",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 23.0
+        }, {
+          "in" : "query",
+          "name" : "NElat",
+          "description" : "緯度北界",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 25.0
+        }, {
+          "in" : "query",
+          "name" : "SWlng",
+          "description" : "經度西界",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 120.0
+        }, {
+          "in" : "query",
+          "name" : "NElng",
+          "description" : "經度東界",
+          "required" : false,
+          "schema" : {
+            "type" : "number",
+            "format" : "float"
+          },
+          "example" : 122.0
+        }, {
+          "in" : "query",
+          "name" : "withoutSynonym",
+          "description" : "不檢查同物異名，預設值為 0 (結果含同物異名)",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "default" : 0,
+            "enum" : [ 0, 1 ]
+          }
+        }, {
+          "in" : "query",
+          "name" : "minElevation",
+          "description" : "最小海拔高度(整數公尺)",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "example" : 0
+        }, {
+          "in" : "query",
+          "name" : "maxElevation",
+          "description" : "最大海拔高度(整數公尺)",
+          "required" : false,
+          "schema" : {
+            "type" : "integer"
+          },
+          "example" : 4000
+        }, {
+          "in" : "query",
+          "name" : "mapWidth",
+          "description" : "地圖顯示寬度，單位為 px",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "default" : 600
+          },
+          "example" : 600
+        }, {
+          "in" : "query",
+          "name" : "mapHeight",
+          "description" : "地圖顯示高度，單位為 px",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "default" : 500
+          },
+          "example" : 500
+        }, {
+          "in" : "query",
+          "name" : "customCSS",
+          "description" : "使用者自訂 CSS，值為 web accessible 的位置",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "format" : "url"
+          },
+          "example" : "http://portal.biodiv.biota.tw/custom.css"
+        }, {
+          "in" : "query",
+          "name" : "statistic",
+          "description" : "顯示按單位統計資料筆數",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "default" : 1,
+            "enum" : [ 0, 1 ]
+          }
+        } ]
+      }
+    },
+    "/vgd/solr/solrName_new.php" : {
+      "get" : {
+        "tags" : [ "學名檢核" ],
+        "summary" : "(7558) 將使用者輸入之學名與物種名錄資料庫進行比對",
+        "operationId" : "matchScientificName",
+        "description" : "使用者輸入學名（可不含或包含作者年代、rank marker等資訊）系統將與後端學名資料庫進行比對（包含小幅拼寫校正），若比對成功，將回傳使用者輸入的學名 id，以及其相對應的有效學名 id。",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "input_name",
+          "description" : "使用者欲比對的學名",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Ilex lonicerifolia Hayata var. hakkuensis (Yamamoto) S. Y. Hu"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "比對到的學名 id 與有效學名 id",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "uid" : {
+                      "type" : "string"
+                    },
+                    "an_uid" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BDTools/italicForm.php" : {
+      "get" : {
+        "tags" : [ "學名檢核" ],
+        "summary" : "(7572) 將使用者輸入之完整學名格式化",
+        "operationId" : "formatScientificName",
+        "description" : "以 html tag 將使用者輸入之完整學名的拉丁名部分以斜體處理",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "names",
+          "description" : "使用者欲格式化的學名，可使用 \\n 分隔多筆輸入值 (URL編碼為 %0A )",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Schoenoplectus mucronatus (L.) Palla subsp. robustus (Miq.) T. Koyama 1978"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "格式化後的學名，以 \\n 分隔多筆回傳值",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BDTools/coordinateConverterCSV.php" : {
+      "get" : {
+        "tags" : [ "座標檢核" ],
+        "summary" : "(7559) 在臺灣數種常見的地理座標系統之間進行轉換",
+        "operationId" : "coordinateConverterGET",
+        "description" : "使用者選定輸入輸出座標系統，並提供座標點，系統將依設定轉換座標值。輸入輸出都以十進位表示。座標系統代碼 1：WGS84 經緯度；2：TWD67 經緯度；3：TWD97 經緯度；4：TWD97TM2 澎湖地區；5：TWD97TM2 臺灣地區；6：TWD67TM2 澎湖地區；7：TWD67TM2 臺灣地區。",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "src",
+          "description" : "使用者輸入的座標所使用的座標系統",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/GeoDatumCode"
+          },
+          "example" : 5
+        }, {
+          "in" : "query",
+          "name" : "tgt",
+          "description" : "轉換後的座標系統",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/GeoDatumCode"
+          },
+          "example" : 1
+        }, {
+          "in" : "query",
+          "name" : "xy",
+          "description" : "使用者輸入的座標，可接受多值，格式為 x1 y1|x2 y2|x3 y3|...",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "123456 2234567"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "系統轉換後的座標值，以空白作為分隔符號的類 CSV 字串。欄位為 srcX、srcY tgtX、tgtY，以 \\n 為換行記號",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "座標檢核" ],
+        "summary" : "(7559) 在臺灣數種常見的座標系統之間進行轉換",
+        "operationId" : "coordinateConverterPOST",
+        "description" : "使用者選定輸入輸出座標系統，並提供座標點，系統將依設定轉換座標值。輸入輸出都以十進位表示。座標系統代碼 1：WGS84 經緯度；2：TWD67 經緯度；3：TWD97 經緯度；4：TWD97TM2 澎湖地區；5：TWD97TM2 臺灣地區；6：TWD67TM2 澎湖地區；7：TWD67TM2 臺灣地區。",
+        "requestBody" : {
+          "content" : {
+            "application/x-www-form-urlencoded" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "src", "tgt", "xy" ],
+                "properties" : {
+                  "src" : {
+                    "description" : "使用者輸入的座標所使用的座標系統",
+                    "type" : "integer",
+                    "enum" : [ 1, 2, 3, 4, 5, 6, 7 ],
+                    "example" : 5
+                  },
+                  "tgt" : {
+                    "description" : "轉換後的座標系統",
+                    "type" : "integer",
+                    "enum" : [ 1, 2, 3, 4, 5, 6, 7 ],
+                    "example" : 1
+                  },
+                  "xy" : {
+                    "description" : "使用者輸入的座標，可接受多值，格式為 x1 y1|x2 y2|x3 y3|...",
+                    "type" : "string",
+                    "example" : "123456 2234567"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "系統轉換後的座標值，以空白作為分隔符號的類 CSV 字串。欄位為 srcX、srcY tgtX、tgtY，以 \\n 為換行記號",
+            "content" : {
+              "text/plain" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BDTools/upload_file.php" : {
+      "post" : {
+        "tags" : [ "座標檢核" ],
+        "summary" : "(7560) 檢驗資料中的座標與行政區是否正確對應",
+        "operationId" : "coordinateChecker",
+        "description" : "程式將依使用者上傳資料中的 wgs84 十進位座標計算鄰近的二級行政區，並與使用者上傳資料中的二級行政區欄位進行比對。而後在使用者上傳資料中新增比對結果之欄位，以 CSV 檔回傳給使用者。",
+        "responses" : {
+          "200" : {
+            "description" : "在使用者資料中加入驗證結果的 CSV 檔",
+            "content" : {
+              "text/csv" : {
+                "schema" : {
+                  "type" : "string",
+                  "format" : "binary"
+                }
+              }
+            }
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string"
+                  },
+                  "download" : {
+                    "type" : "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "description" : "使用者上傳的資料檔，內容至少要包含以下欄位。rid：row id；x：經度；y：緯度；loc：二級行政區中文名。順序不拘。"
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "GeoDatumCode" : {
+        "type" : "integer",
+        "enum" : [ 1, 2, 3, 4, 5, 6, 7 ]
+      },
+      "Institution" : {
+        "type" : "string",
+        "enum" : [ "HAST", "TAIF", "TAI", "NMNS", "TESRI1", "TESRI2", "TESRI3", "ASIZ", "FRI", "NMMB", "NMMST", "NTHU", "NTM", "NTOU", "NTU", "BCRC", "FACT", "BIRD", "PLANTAE", "TAD", "TMCD", "MLSP", "DARC", "TARI", "NSYSU", "FA", "NCYU", "FORESTRY_BUREAU", "CPAMITW", "TESRI-FB-EnjoyMoths" ]
+      }
+    }
+  }
+}
