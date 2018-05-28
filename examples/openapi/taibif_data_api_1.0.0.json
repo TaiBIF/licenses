@@ -32,6 +32,7 @@
         "tags" : [ "生物出現點位資料" ],
         "summary" : "臺灣物種出現紀錄資料 API",
         "operationId" : "getOccJson",
+        "description" : "傳遞篩選參數取得 json 格式之物種出現紀錄",
         "responses" : {
           "200" : {
             "description" : "查詢物種出現紀錄",
@@ -135,6 +136,7 @@
         "tags" : [ "生物出現點位資料" ],
         "summary" : "(7561) 臺灣物種出現紀錄資料表格API",
         "operationId" : "occTable",
+        "description" : "傳遞篩選參數以取得可內嵌於網頁的互動式資料表",
         "responses" : {
           "200" : {
             "description" : "可內嵌於網頁的 html 資料表格",
@@ -220,6 +222,7 @@
         "tags" : [ "生物出現點位資料" ],
         "summary" : "(7573) 臺灣物種出現紀錄資料地圖API",
         "operationId" : "occMap",
+        "description" : "傳遞篩選參數以取得可內嵌於網頁的互動式資料地圖",
         "responses" : {
           "200" : {
             "description" : "可內嵌於網頁的 html 資料地圖",
